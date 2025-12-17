@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  # La Recepcionista (Service Discovery) [cite: 196, 198]
+  eureka-server:
+    build: ./eureka-server
+    ports:
+      - "8761:8761"
+
+  # El Robot de Tráfico (Microservicio con Resiliencia) [cite: 212, 369]
+  servicio-trafico:
+    build: ./servicio-trafico
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    depends_on:
+      - eureka-server
+
+  # El Portero (API Gateway) [cite: 122, 513]
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    depends_on:
+      - eureka-server

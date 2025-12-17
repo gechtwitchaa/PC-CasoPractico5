@@ -1,0 +1,23 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: servicio-trafico
+
+eureka:
+  client:
+    serviceUrl:
+
+      defaultZone: http://eureka-server:8761/eureka/
+
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      serviceTrafico:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5s
+        slidingWindowSize: 5
